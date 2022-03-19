@@ -22,6 +22,37 @@ namespace Demo.Pages
         }
         public void OnGet()
         {
+            fillInvoice();
+        }
+
+        public void OnPost()
+        {
+            using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("main")))
+            {
+                con.Open();
+                IDatabase db = new Database(con);
+
+                var IssueDate = DateTime.Parse(Request.Form["IssueDate"]);
+
+                if (InvoiceId.HasValue)
+                {
+                    // Update
+                    db.Execute("update invoice set issue_date = @issueDate where id = @id", new { id = InvoiceId, issueDate = IssueDate });
+                }
+                else
+                {
+                    // TODO Insert
+                    InvoiceId = 1;
+                }
+            }
+
+            // TODO Bolje bi bilo narediti redirect na get, ampak na hitro nisem našel rešitve kako prepreèit renderiranje strani, ki zahteva invoice object
+            // Trenutno paè F5 re-posta stran
+            fillInvoice();
+        }
+
+        private void fillInvoice()
+        {
             using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("main")))
             {
                 con.Open();
@@ -47,36 +78,13 @@ namespace Demo.Pages
                     inner
                     join article a on a.id = il.id_article
                     where i.id = @id", new { id = InvoiceId });
-                } 
+                }
                 else
                 {
                     invoice = new InvoiceDTO();
                     invoice.Lines = new List<InvoiceLineDTO>();
                 }
             }
-        }
-
-        public void OnPost()
-        {
-            using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("main")))
-            {
-                con.Open();
-                IDatabase db = new Database(con);
-
-                var IssueDate = DateTime.Parse(Request.Form["IssueDate"]);
-
-                if (InvoiceId.HasValue)
-                {
-                    // Update
-                    var affected = db.Update("update invoice set issue_date = @issueDate where id = @id", new { id = InvoiceId, issueDate = IssueDate });
-                }
-                else
-                {
-                    // Insert
-                }
-            }
-
-            // RedirectPermanent("/invoiceedit?id=10");
         }
     }
 }
