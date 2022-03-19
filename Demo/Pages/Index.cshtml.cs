@@ -10,6 +10,7 @@ namespace Demo.Pages
         private readonly IConfiguration _configuration;
 
         public string sqlTime;
+        public List<InvoiceDTO> invoices;
 
         public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
@@ -24,6 +25,8 @@ namespace Demo.Pages
                 con.Open();
                 IDatabase db = new Database(con);
                 sqlTime = db.Fetch<string>("select getdate()").First();
+
+                invoices = db.Fetch<InvoiceDTO>(1, 10, "select i.id, i.issue_date, c.name as client_name from invoice i inner join client c on c.id = i.id_client");
             }
         }
     }

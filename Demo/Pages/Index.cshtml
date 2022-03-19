@@ -11,8 +11,11 @@
 
      <p>Seznam računov</p>
 
-     <ol>
-         <li></li>
-     </ol>
+     <ul style="text-align: left">
+         @foreach (var item in Model.invoices)
+         {
+         <li><a href="/Invoice?id=@item.Id">@item.Id</a>- @item.ClientName - @item.IssueDate </li>
+         }
+     </ul>
     
 </div>
