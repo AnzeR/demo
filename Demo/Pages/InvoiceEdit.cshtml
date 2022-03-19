@@ -1,0 +1,25 @@
+﻿@page
+@model InvoiceEditModel
+@{
+    ViewData["Title"] = "Račun";
+}
+
+<div class="text-center" style="text-align: left">
+    <form method="post">
+     <p style="text-align: left">Podatki o računu:</p>
+
+     <p style="text-align: left">Id: <input type="hidden" name="Id" value="@Model.invoice.Id" />@Model.invoice.Id</p>
+     <p style="text-align: left">Klient: <input type="text" name="ClientName" value="@Model.invoice.ClientName" /></p>
+     <p style="text-align: left">Datum Izdaje: <input type="text" name="IssueDate" value="@Model.invoice.IssueDate" /></p>
+     <p style="text-align: left">Znesek: @Model.invoice.Sum</p>
+
+     <p style="text-align: left">Artikli:</p>
+     <ul style="text-align: left">
+         @foreach (var line in Model.invoice.Lines)
+         {
+         <li>@line.Article - @line.Price - @line.Amount - @Html.Raw(line.Price * line.Amount)</li>
+         }
+     </ul>
+     <input type="submit" value="Vnesi/Popravi račun" />
+    </form>
+</div>

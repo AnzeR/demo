@@ -14,7 +14,7 @@
      <ul style="text-align: left">
          @foreach (var item in Model.invoices)
          {
-         <li><a href="/Invoice?id=@item.Id">@item.Id</a>- @item.ClientName - @item.IssueDate </li>
+         <li><a href="/InvoiceEdit?id=@item.Id">@item.Id</a>- @item.ClientName - @item.IssueDate </li>
          }
      </ul>
     
